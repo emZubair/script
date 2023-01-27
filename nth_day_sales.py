@@ -13,10 +13,10 @@ URL = "https://api.shopraha.com/sap/api/v1/{}/"
 # URL = "http://127.0.0.1:8080/sap/api/v1/{}/"
 DISCREPANCIES_ENDPOINT = "download-order-sales-range"
 SALES_ENDPOINT = "download-range-sales"
-TOKEN = "f18528b913004c6dd12471b8d02fee5eeac14b8c"
+TOKEN = ""
 header = {
     "Content-Type": "application/json",
-    "Authorization": "token f18528b913004c6dd12471b8d02fee5eeac14b8c"
+    "Authorization": "token "
 }
 
 
