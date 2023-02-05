@@ -3,17 +3,14 @@ from glob import glob
 import os
 import requests
 from json import dumps
-from datetime import date, timedelta, datetime
+from datetime import timedelta, datetime
 import pathlib
 
-from django import forms
 
-
-URL = "https://api.shopraha.com/sap/api/v1/{}/"
-# URL = "http://127.0.0.1:8080/sap/api/v1/{}/"
+URL = os.getenv("LOCAL_TOKEN")
 DISCREPANCIES_ENDPOINT = "download-order-sales-range"
 SALES_ENDPOINT = "download-range-sales"
-TOKEN = ""
+TOKEN = os.getenv("LOCAL_URL")
 header = {
     "Content-Type": "application/json",
     "Authorization": "token "
