@@ -7,13 +7,13 @@ from datetime import timedelta, datetime
 import pathlib
 
 
-URL = os.getenv("LOCAL_TOKEN")
+URL = os.getenv("LOCAL_URL")
 DISCREPANCIES_ENDPOINT = "download-order-sales-range"
 SALES_ENDPOINT = "download-range-sales"
-TOKEN = os.getenv("LOCAL_URL")
+TOKEN = os.getenv("LOCAL_TOKEN")
 header = {
     "Content-Type": "application/json",
-    "Authorization": "token "
+    "Authorization": f"token {TOKEN}"
 }
 
 
@@ -35,6 +35,7 @@ def download_nth_day_data(start_date):
         "endDate": parse_date
     }
     response = requests.post(url=URL.format(DISCREPANCIES_ENDPOINT), headers=header, data=dumps(data))
+    breakpoint()
     with open(f"reports/{parse_date}.txt", 'w') as f:
         f.write(response.text)
 
@@ -61,8 +62,8 @@ def download_one():
 
 def print_hi(name):
     # Use a breakpoint in the code line below to debug your script.
-    find_discrepancies()
-    return
+    # find_discrepancies()
+    # return
     start_date = datetime.strptime("2022-12-29", "%Y-%m-%d").date()
     end_date = datetime.strptime("2022-12-29", "%Y-%m-%d").date()
     # end_date = date.today()

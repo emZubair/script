@@ -2,15 +2,13 @@ import os
 import re
 from glob import glob
 import requests
-from json import dumps, loads
+from json import dumps
 import pathlib
 
-URL = "https://api.shopraha.com/sap/api/v1/{}/"
+URL = os.getenv("LOCAL_URL")
 DISCREPANCIES_ENDPOINT = "download-order-sales-range"
 SALES_ENDPOINT = "download-range-sales"
-TOKEN = os.getenv("token", "")
-
-"f18528b913004c6dd12471b8d02fee5eeac14b8c"
+TOKEN = os.getenv("LOCAL_TOKEN")
 header = {
     "Content-Type": "application/json",
     "Authorization": f"token {TOKEN}"
