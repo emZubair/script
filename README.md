@@ -43,8 +43,7 @@ pip install -r requirements.txt
 
 ### Execution
 
-`utils.py` contains a function named `trigger_job` update the `start_date` and `end_date`.
-After making the changes run the following command to trigger the job.
+`utils.py` contains a function named `trigger_job`, run the following command to trigger the job.
 ```python
 python utils.py
 ```
