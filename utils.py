@@ -1,3 +1,4 @@
+# pylint: disable=unused-variable, missing-timeout, unspecified-encoding, wildcard-import, unused-wildcard-import
 import os
 import pathlib
 import re
@@ -7,32 +8,40 @@ from json import dumps
 
 import requests
 
-URL = os.getenv("URL")
-TOKEN = os.getenv("TOKEN")
-SALES_ENDPOINT = os.getenv("SALES_ENDPOINT")
-DISCREPANCIES_ENDPOINT = os.getenv("DISCREPANCIES_ENDPOINT")
+from variables import *
 
 header = {"Content-Type": "application/json", "Authorization": f"token {TOKEN}"}
 
-# pylint: disable=unused-variable, missing-timeout, unspecified-encoding
+
+def create_directories():
+    for path in ["reports", "sales", "payments"]:
+        if not os.path.exists(path):
+            os.makedirs(path)
 
 
 def fetch_data_for_date_from(date_to_fetch, endpoint):
     data = {"startDate": date_to_fetch, "endDate": date_to_fetch}
-    return requests.post(url=URL.format(endpoint), headers=header, data=dumps(data))
+    return requests.post(url=f"{URL}{endpoint}/", headers=header, data=dumps(data))
 
 
 def download_nth_day_discrepancy_data(start_date):
     parse_date = start_date.strftime("%Y-%m-%d")
     response = fetch_data_for_date_from(start_date, DISCREPANCIES_ENDPOINT)
-    with open(f"reports/{parse_date}.txt", "w") as f:
+    with open(f"reports/{parse_date}.csv", "w") as f:
         f.write(response.text)
 
 
-def download_sale_lines_for_date(start_date):
+def download_sale_lines_for_data(start_date):
     parse_date = start_date.strftime("%Y-%m-%d")
     response = fetch_data_for_date_from(parse_date, SALES_ENDPOINT)
-    with open(f"sales/{parse_date}.txt", "w") as f:
+    with open(f"sales/{parse_date}.csv", "w") as f:
+        f.write(response.text)
+
+
+def download_payment_lines_for_data(start_date):
+    parse_date = start_date.strftime("%Y-%m-%d")
+    response = fetch_data_for_date_from(parse_date, PAYMENTS_ENDPOINT)
+    with open(f"payments/{parse_date}.csv", "w") as f:
         f.write(response.text)
 
 
@@ -48,15 +57,19 @@ def find_discrepancies():
 
 
 def trigger_job():
-    start_date = datetime.strptime("2022-12-29", "%Y-%m-%d").date()
-    end_date = datetime.strptime("2022-12-29", "%Y-%m-%d").date()
+    end_date = datetime.strptime(END_DATE, "%Y-%m-%d").date()
+    start_date = datetime.strptime(START_DATE, "%Y-%m-%d").date()
+    create_directories()
 
     while start_date <= end_date:
         start = datetime.now()
         print(f"Fetching data for {start_date} --- {start}")
-        # start_date = datetime.strptime("2022-07-21", "%Y-%m-%d").date()
-        # download_sale_lines(start_date)
-        download_nth_day_discrepancy_data(start_date)
+        if DOWNLOAD_PAYMENTS:
+            download_payment_lines_for_data(start_date)
+        if DOWNLOAD_SALES:
+            download_sale_lines_for_data(start_date)
+        if DOWNLOAD_DISCREPANCIES_DATA:
+            download_nth_day_discrepancy_data(start_date)
         start_date = start_date + timedelta(days=1)
         print(f"Ending time --- {datetime.now() - start}")
 
