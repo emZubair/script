@@ -26,7 +26,7 @@ def fetch_data_for_date_from(date_to_fetch, endpoint):
 
 def download_nth_day_discrepancy_data(start_date):
     parse_date = start_date.strftime("%Y-%m-%d")
-    response = fetch_data_for_date_from(start_date, DISCREPANCIES_ENDPOINT)
+    response = fetch_data_for_date_from(parse_date, DISCREPANCIES_ENDPOINT)
     with open(f"reports/{parse_date}.csv", "w") as f:
         f.write(response.text)
 
